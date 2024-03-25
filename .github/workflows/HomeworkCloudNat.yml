@@ -30,7 +30,7 @@ jobs:
         run: ls -la
 
       - name: Build Docker Image
-        run: docker build --tag ActionsImg
+        run: docker build < Dockerfile
       # Runs a single command using the runners shell
       - name: Downloading CLI Client
         run: |
