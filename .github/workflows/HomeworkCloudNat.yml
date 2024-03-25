@@ -23,11 +23,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - 
-        name: Set up Github Action Checkout
+      - name: Set up Github Action Checkout
         uses: actions/checkout@v3
-      -
-        name: Build Docker Image
+
+      - name: check directory 1
+        run: ls -la
+
+      - name: Build Docker Image
         run: docker compose build
       # Runs a single command using the runners shell
       - name: Downloading CLI Client
@@ -40,7 +42,7 @@ jobs:
           echo "Verifying the CLI"
           mend version
       
-      - name: check directory
+      - name: check directory 2
         run: ls -la
       
 
