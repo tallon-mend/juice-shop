@@ -15,9 +15,10 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      PROJ_NAME: ${{ github.event.repository.name }}
+      REPO_NAME: ${{ github.event.repository.name }}
       IMG_TAG: ${{ github.ref_name }}
       DOCKER_NAMESPACE: ${{ vars.DOCKER_NAMESPACE }}
+      RUN_ID: ${{github.run_id}}
 
     steps:
 
@@ -32,25 +33,25 @@ jobs:
       
       - name: Build Docker Image
         run: |
-          echo building $PROJ_NAME:$IMG_TAG image
-          docker build --tag $PROJ_NAME:$IMG_TAG .
+          echo building $REPO_NAME:$IMG_TAG image
+          docker build --tag $REPO_NAME:$IMG_TAG .
 
       - name: Retagging Docker Image for Push
         run: |
-          echo Retagging $PROJ_NAME:$IMG_TAG image
-          docker tag $PROJ_NAME:$IMG_TAG $DOCKER_NAMESPACE/$PROJ_NAME:$IMG_TAG
+          echo Retagging $REPO_NAME:$IMG_TAG image
+          docker tag $REPO_NAME:$IMG_TAG $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
           docker image ls
       
       - name: Pushing Docker Image
         run: |
-          echo pushing $PROJ_NAME:$IMG_TAG image
-          docker push $DOCKER_NAMESPACE/$PROJ_NAME:$IMG_TAG
+          echo pushing $REPO_NAME:$IMG_TAG image
+          docker push $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
 
       - name: Deleting local Docker Images
         run: |
           echo deleting local instance of $IMG_TAG image
-          docker image remove $PROJ_NAME:$IMG_TAG
-          docker image remove $DOCKER_NAMESPACE/$PROJ_NAME:$IMG_TAG
+          docker image remove $REPO_NAME:$IMG_TAG
+          docker image remove $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
           docker image ls
 
       - name: Downloading CLI Client
@@ -71,6 +72,6 @@ jobs:
           MEND_LOG_LEVEL: "DEBUG"
           
         run: |
-          echo running CLI scan on $DOCKER_NAMESPACE/$PROJ_NAME:$IMG_TAG
-          mend image $DOCKER_NAMESPACE/$PROJ_NAME:$IMG_TAG --scope "DockerHub//$PROJ_NAME" --non-interactive
+          echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
+          mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
         continue-on-error: true
