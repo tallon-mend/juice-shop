@@ -43,8 +43,8 @@ jobs:
 
       - name: Pushing Docker Image
         run: |
-          echo pushing $PROJ_NAME:$IMG_TAG image
-          docker push tallonmend/juice-shop:$PROJ_NAME:$IMG_TAG
+          echo pushing $DOCKER_URL:$PROJ_NAME:$IMG_TAG image
+          docker push $DOCKER_URL:$PROJ_NAME:$IMG_TAG
 
       - name: Deleting local Docker Image
         run: |
