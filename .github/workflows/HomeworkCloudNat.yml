@@ -43,8 +43,8 @@ jobs:
 
       - name: Pushing Docker Image
         run: |
-          echo pushing $DOCKER_URL/$PROJ_NAME:$IMG_TAG image
-          docker push $DOCKER_URL/$PROJ_NAME:$IMG_TAG
+          echo pushing $IMG_TAG image
+          docker push $IMG_TAG
 
       - name: Deleting local Docker Image
         run: |
