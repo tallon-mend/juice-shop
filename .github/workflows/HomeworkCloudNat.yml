@@ -38,8 +38,8 @@ jobs:
       
       - name: Build Docker Image
         run: |
-          echo building $IMG_TAG image
-          docker build --tag $IMG_TAG .
+          echo building $PROJ_NAME:$IMG_TAG image
+          docker build --tag $PROJ_NAME:$IMG_TAG .
 
       - name: Pushing Docker Image
         run: |
@@ -70,7 +70,7 @@ jobs:
           
         run: |
           echo running CLI scan on $IMG_TAG
-          mend image $DOCKER_URL:$IMG_TAG --scope "GitActions//$PROJ_NAME" --non-interactive
+          mend image $DOCKER_URL/$PROJ_NAME:$IMG_TAG --scope "GitActions//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
       - name: Printing CLI logs
