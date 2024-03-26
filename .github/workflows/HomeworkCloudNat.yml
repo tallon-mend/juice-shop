@@ -52,7 +52,7 @@ jobs:
           START_IMG: docker.io/library/$PROJ_NAME:$IMG_TAG
           
         run: |
-              mend image $START_IMG --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
+              mend image $START_IMG --local-pull --scope "GitActions//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
       - name: Printing CLI logs
