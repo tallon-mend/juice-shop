@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJ_NAME: ${{ github.event.repository.name }}
-      IMG_TAG: ${GITHUB_REF##*/}
+      IMG_TAG: ${{ github.ref.name }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -40,8 +40,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          echo running on ${GITHUB_REF##*/}
-          docker build --tag $PROJ_NAME:${GITHUB_REF##*/} .
+          echo running on $IMG_TAG
+          docker build --tag $PROJ_NAME:$IMG_TAG .
 
       - name: Running CLI
         env: 
@@ -49,9 +49,10 @@ jobs:
           MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
           MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
           MEND_LOG_LEVEL: "DEBUG"
+          STAT_IMG: docker.io/library/$PROJ_NAME
           
         run: |
-              mend image <$PROJ_NAME[:$IMG_TAG]> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
+              mend image <$STAT_IMG[:$IMG_TAG]> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
         continue-on-error: true
         
       - name: Printing CLI logs
