@@ -49,10 +49,10 @@ jobs:
           MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
           MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
           MEND_LOG_LEVEL: "DEBUG"
-          STAT_IMG: docker.io/library/$PROJ_NAME
+          START_IMG: docker.io/library/$PROJ_NAME:$IMG_TAG
           
         run: |
-              mend image <$STAT_IMG[:$IMG_TAG]> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
+              mend image $START_IMG --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
         continue-on-error: true
         
       - name: Printing CLI logs
