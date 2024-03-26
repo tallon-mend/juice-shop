@@ -39,7 +39,9 @@ jobs:
           mend version
 
       - name: Build Docker Image
-        run: docker build --tag $PROJ_NAME:$IMG_TAG .
+        run: |
+          echo running on ${GITHUB_REF##*/}
+          docker build --tag $PROJ_NAME:${GITHUB_REF##*/} .
 
       - name: Running CLI
         env: 
