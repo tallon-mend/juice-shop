@@ -37,7 +37,7 @@ jobs:
           mend version
 
       - name: Build Docker Image
-        run: docker build --tag $github.event.repository.name:$GITHUB_REF##*/ .
+        run: docker build --tag ${github.event.repository.name} .
 
       - name: Running CLI
         env: 
@@ -47,7 +47,7 @@ jobs:
           MEND_LOG_LEVEL: "DEBUG"
           PROJ_NAME: ${{ github.event.repository.name }}
         run: |
-              mend image <$PROJ_NAME[:$GITHUB_REF##*/]> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
+              mend image <$PROJ_NAME> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
         continue-on-error: true
         
       - name: Printing CLI logs
