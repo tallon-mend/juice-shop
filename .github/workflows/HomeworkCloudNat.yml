@@ -40,8 +40,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          echo running on $IMG_TAG
- #         docker build --tag $PROJ_NAME:$IMG_TAG .
+          echo building $PROJ_NAME:$IMG_TAG image
+          docker build --tag $PROJ_NAME:$IMG_TAG .
 
       - name: Running CLI
         env: 
@@ -49,11 +49,10 @@ jobs:
           MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
           MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
           MEND_LOG_LEVEL: "DEBUG"
-          START_IMG: $PROJ_NAME:$IMG_TAG
           
         run: |
-          echo running on $PROJ_NAME:$IMG_TAG
-#          mend image $START_IMG --local-pull --scope "GitActions//$PROJ_NAME" --non-interactive
+          echo running CLI scan on $PROJ_NAME:$IMG_TAG
+          mend image $PROJ_NAME:$IMG_TAG --local-pull --scope "GitActions//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
       - name: Printing CLI logs
