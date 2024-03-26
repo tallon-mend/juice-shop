@@ -43,13 +43,13 @@ jobs:
 
       - name: Pushing Docker Image
         run: |
-          echo pushing $DOCKER_URL:$IMG_TAG image
-          docker push $DOCKER_URL:$IMG_TAG
+          echo pushing $DOCKER_URL/$PROJ_NAME:$IMG_TAG image
+          docker push $DOCKER_URL/$PROJ_NAME:$IMG_TAG
 
       - name: Deleting local Docker Image
         run: |
           echo deleting local instance of $IMG_TAG image
-          docker image remove $IMG_TAG
+          docker image remove $PROJ_NAME:$IMG_TAG
 
       - name: Downloading CLI Client
         run: |
@@ -69,8 +69,8 @@ jobs:
           MEND_LOG_LEVEL: "DEBUG"
           
         run: |
-          echo running CLI scan on $IMG_TAG
-          mend image $DOCKER_URL/$PROJ_NAME:$IMG_TAG --scope "GitActions//$PROJ_NAME" --non-interactive
+          echo running CLI scan on $PROJ_NAME:$IMG_TAG
+          mend image $DOCKER_URL/$PROJ_NAME:$IMG_TAG --scope "DockerHub//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
       - name: Printing CLI logs
