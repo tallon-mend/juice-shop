@@ -52,7 +52,7 @@ jobs:
           START_IMG: $PROJ_NAME:$IMG_TAG
           
         run: |
-          echo running on $START_IMG
+          echo running on $PROJ_NAME:$IMG_TAG
 #          mend image $START_IMG --local-pull --scope "GitActions//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
