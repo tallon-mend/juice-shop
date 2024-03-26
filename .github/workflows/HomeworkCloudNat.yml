@@ -19,7 +19,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    env:
+      PROJ_NAME: ${{ github.event.repository.name }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -37,7 +38,7 @@ jobs:
           mend version
 
       - name: Build Docker Image
-        run: docker build --tag ${{ github.event.repository.name }}:$GITHUB_REF##*/ .
+        run: docker build --tag $PROJ_NAME:$GITHUB_REF##*/ .
 
       - name: Running CLI
         env: 
@@ -45,7 +46,7 @@ jobs:
           MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
           MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
           MEND_LOG_LEVEL: "DEBUG"
-          PROJ_NAME: ${{ github.event.repository.name }}
+          
         run: |
               mend image <$PROJ_NAME[:$GITHUB_REF##*/]> --local-pull --update --scope "GitActions//$PROJ_NAME" --non-interactive -e
         continue-on-error: true
