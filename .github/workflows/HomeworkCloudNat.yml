@@ -22,21 +22,13 @@ jobs:
     env:
       PROJ_NAME: ${{ github.event.repository.name }}
       IMG_TAG: ${{ github.ref_name }}
+      DOCKER_URL: ${{ vars.DOCKER_URL }}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Set up Github Action Checkout
         uses: actions/checkout@v3
-
-      - name: Downloading CLI Client
-        run: |
-          echo "Downloading the CLI"
-          curl "https://downloads.mend.io/cli/linux_amd64/mend" -o /usr/local/bin/mend && chmod +x /usr/local/bin/mend
-     
-      - name: Verify Scanner
-        run: |
-          echo "Verifying the CLI"
-          mend version
       
       - name: DockerHub Login
         uses: docker/login-action@v3
@@ -49,6 +41,26 @@ jobs:
           echo building $PROJ_NAME:$IMG_TAG image
           docker build --tag $PROJ_NAME:$IMG_TAG .
 
+      - name: Pushing Docker Image
+        run: |
+          echo pushing $PROJ_NAME:$IMG_TAG image
+          docker push tallonmend/juice-shop:$PROJ_NAME:$IMG_TAG
+
+      - name: Deleting local Docker Image
+        run: |
+          echo deleting local instance of $PROJ_NAME:$IMG_TAG image
+          docker image remove $PROJ_NAME:$IMG_TAG
+
+      - name: Downloading CLI Client
+        run: |
+          echo "Downloading the CLI"
+          curl "https://downloads.mend.io/cli/linux_amd64/mend" -o /usr/local/bin/mend && chmod +x /usr/local/bin/mend
+     
+      - name: Verify Scanner
+        run: |
+          echo "Verifying the CLI"
+          mend version
+      
       - name: Running CLI
         env: 
           MEND_URL: ${{ secrets.MEND_URL }}
@@ -58,7 +70,7 @@ jobs:
           
         run: |
           echo running CLI scan on $PROJ_NAME:$IMG_TAG
-          mend image $PROJ_NAME:$IMG_TAG --local-pull --scope "GitActions//$PROJ_NAME" --non-interactive
+          mend image $DOCKER_URL:$PROJ_NAME:$IMG_TAG --scope "GitActions//$PROJ_NAME" --non-interactive
         continue-on-error: true
         
       - name: Printing CLI logs
