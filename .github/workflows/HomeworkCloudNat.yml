@@ -74,7 +74,7 @@ jobs:
           MEND_LOG_LEVEL: "DEBUG"
         
         run: |
-          mend image $REPO_NAME:$IMG_TAG --local-pull --update --scope "GitActions//$RUN_ID" --non-interactive
+          mend image $REPO_NAME:$IMG_TAG --local-pull --scope "GitActions//$RUN_ID" --non-interactive
         # run: |
         #   echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
         #   mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
