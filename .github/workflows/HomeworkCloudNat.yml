@@ -38,23 +38,23 @@ jobs:
           docker build --tag $REPO_NAME:$IMG_TAG --tag $REPO_NAME:$IMG_TAG_TEST .
           docker image ls
 
-      - name: Retagging Docker Image for Push
-        run: |
-          echo Retagging $REPO_NAME:$IMG_TAG image
-          docker tag $REPO_NAME:$IMG_TAG $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
-          docker image ls
+      # - name: Retagging Docker Image for Push
+      #   run: |
+      #     echo Retagging $REPO_NAME:$IMG_TAG image
+      #     docker tag $REPO_NAME:$IMG_TAG $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
+      #     docker image ls
       
-      - name: Pushing Docker Image
-        run: |
-          echo pushing $REPO_NAME:$IMG_TAG image
-          docker push $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
+      # - name: Pushing Docker Image
+      #   run: |
+      #     echo pushing $REPO_NAME:$IMG_TAG image
+      #     docker push $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
 
-      - name: Deleting local Docker Images
-        run: |
-          echo deleting local instance of $IMG_TAG image
-          docker image remove $REPO_NAME:$IMG_TAG
-          docker image remove $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
-          docker image ls
+      # - name: Deleting local Docker Images
+      #   run: |
+      #     echo deleting local instance of $IMG_TAG image
+      #     docker image remove $REPO_NAME:$IMG_TAG
+      #     docker image remove $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
+      #     docker image ls
 
       - name: Downloading CLI Client
         run: |
@@ -72,8 +72,10 @@ jobs:
           MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
           MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
           MEND_LOG_LEVEL: "DEBUG"
-          
+        
         run: |
-          echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
-          mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
+          mend image $REPO_NAME:$IMG_TAG --local-pull --update --scope "GitActions//$RUN_ID" --non-interactive -e
+        # run: |
+        #   echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
+        #   mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
         continue-on-error: true
