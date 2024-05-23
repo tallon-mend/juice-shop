@@ -35,7 +35,7 @@ jobs:
       - name: Build Docker Image
         run: |
           echo building $REPO_NAME:$IMG_TAG image
-          docker build --tag $REPO_NAME:$IMG_TAG --tag $REPO_NAME:$IMG_TAG_TEST .
+          docker build --tag $REPO_NAME:$IMG_TAG .
           docker image ls
 
       # - name: Retagging Docker Image for Push
