@@ -32,11 +32,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       
-      - name: Build Docker Image
-        run: |
-          echo building $REPO_NAME:$IMG_TAG image
-          docker build --tag $REPO_NAME:$IMG_TAG .
-          docker image ls
+      # - name: Build Docker Image
+      #   run: |
+      #     echo building $REPO_NAME:$IMG_TAG image
+      #     docker build --tag $REPO_NAME:$IMG_TAG .
+      #     docker image ls
 
       # - name: Retagging Docker Image for Push
       #   run: |
@@ -74,11 +74,11 @@ jobs:
           MEND_LOG_LEVEL: "DEBUG"
         
         run: |
-          mend image $REPO_NAME:$IMG_TAG --local-pull --scope "GitActions//$RUN_ID" --non-interactive
+          mend image $REPO_NAME:$IMG_TAG --scope "GitActions//$RUN_ID" --non-interactive
         # run: |
         #   echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
         #   mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
         continue-on-error: true
       
       - name: Printing CLI logs
-        run: cat ~/.mend/logs/cn/*
+        run: cat ~/.mend/logs/cn/*.log
