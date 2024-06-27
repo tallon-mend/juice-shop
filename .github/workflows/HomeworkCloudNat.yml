@@ -79,3 +79,6 @@ jobs:
         #   echo running CLI scan on $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG
         #   mend image $DOCKER_NAMESPACE/$REPO_NAME:$IMG_TAG --scope "DockerHub//$RUN_ID" --non-interactive
         continue-on-error: true
+      
+      - name: Printing CLI logs
+        run: cat ~/.mend/logs/cn/*
